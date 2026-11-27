@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>灯台の光</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%276%27%20fill%3D%27%230b1724%27%2F%3E%3Crect%20x%3D%270%27%20y%3D%2722%27%20width%3D%2732%27%20height%3D%2710%27%20fill%3D%27%230c2430%27%2F%3E%3Cpath%20d%3D%27M12.6%2022l1.1-11h4.6l1.1%2011z%27%20fill%3D%27%23d0c8b8%27%2F%3E%3Crect%20x%3D%2713.4%27%20y%3D%278.6%27%20width%3D%275.2%27%20height%3D%273.2%27%20fill%3D%27%23f2e6a8%27%2F%3E%3Cpath%20d%3D%27M16%2010.2L30%205.4V15.4z%27%20fill%3D%27%23f4e4a0%27%20opacity%3D%27.75%27%2F%3E%3Ccircle%20cx%3D%2716%27%20cy%3D%2710.2%27%20r%3D%271.25%27%20fill%3D%27%23fff6c8%27%2F%3E%3C%2Fsvg%3E">
+    <link rel="stylesheet" href="./ui/styles.css">
+  </head>
+  <body>
+    <div class="app" id="app">
+      <div class="stage" id="stage">
+        <div class="view" id="view">
+          <header class="play-bar" id="play-bar" hidden>
+            <button type="button" class="btn-mute" id="btn-mute" aria-label="音を消す" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M4.2 9.15h3.1L12 5.4v13.2l-4.7-3.75H4.2V9.15z"/>
+                <g class="icon-waves">
+                  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M14.35 8.55a4.7 4.7 0 0 1 0 6.9"/>
+                  <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M16.85 6.35a7.7 7.7 0 0 1 0 11.3"/>
+                </g>
+                <path class="icon-slash" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" d="M15.05 8.15l6.35 7.7"/>
+              </svg>
+            </button>
+            <button type="button" class="btn-finish" id="btn-finish" hidden disabled aria-disabled="true">仕舞う</button>
+          </header>
+
+          <canvas id="game" width="844" height="390" aria-label="プレイ画面。左で明かりを回し、右で明かりの強さを整え、霧笛を鳴らします"></canvas>
+
+          <div class="hud" id="play-hud" hidden>
+            <p class="hud-time" id="hud-time"></p>
+          </div>
+
+          <p class="hint hint-left" id="hint-left" hidden>光を向ける</p>
+          <p class="hint hint-right" id="hint-right" hidden>明かりを強く</p>
+
+          <section class="panel" id="screen-title">
+            <h1 tabindex="-1">灯台の光</h1>
+            <p class="lead">左の指で明かりを回し、右の指で強さを整え、今日の船を礁のあいだから港へ導きます。</p>
+            <p class="rule">横向きにして、左手で明かりを回し、右手で明かりの強さを上下します。霧が濃いときは、明かりを強くし、霧笛を鳴らします。油と空気は限りがあるので、いつも最大にはできません。同じ日は、だれが遊んでも同じ海です。時間が来ると、そこまでの結果で終わります。</p>
+            <div class="title-path-wrap">
+              <p>海</p>
+              <canvas id="title-path" width="240" height="100" aria-hidden="true"></canvas>
+            </div>
+            <p class="meta" id="title-daily">今日の霧はふつう。</p>
+            <p class="meta" id="title-date">今日の海</p>
+            <p class="meta" id="title-record">記録はまだありません</p>
+            <button type="button" class="action" id="btn-start">点ける</button>
+          </section>
+
+          <section class="panel" id="screen-over" hidden>
+            <h1 tabindex="-1">今日の灯</h1>
+            <p class="lead" id="over-score"></p>
+            <p class="meta" id="over-grade"></p>
+            <p class="meta" id="over-today"></p>
+            <p class="meta" id="over-best"></p>
+            <p class="banner" id="over-new-best" hidden>最高記録です</p>
+            <p class="banner" id="over-new-today" hidden>今日の最高です</p>
+            <div class="actions">
+              <button type="button" class="action" id="btn-retry">もう一度</button>
+              <div class="share-row" role="group" aria-label="共有先">
+                <button type="button" class="share-btn" id="btn-share-x" aria-label="Xで共有">
+                  <svg viewBox="0 0 40 40" width="44" height="44" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
+                    <rect width="40" height="40" rx="9" fill="#000"/>
+                    <path fill="#fff" d="M21.62 17.86 30.11 8h-2.01l-7.37 8.52L14.84 8H8.5l8.9 12.68L8.5 32h2.01l7.79-9.01L25.16 32h6.34L21.62 17.86Zm-2.76 3.19-.9-1.26-7.17-10.02h3.08l5.79 8.09.9 1.26 7.54 10.52h-3.08l-6.16-8.59Z"/>
+                  </svg>
+                </button>
+                <button type="button" class="share-btn" id="btn-share-line" aria-label="LINEで共有">
+                  <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true" focusable="false" shape-rendering="geometricPrecision">
+                    <rect width="24" height="24" rx="5.4" fill="#06C755"/>
+                    <g transform="translate(1.8 1.8) scale(0.85)">
+                      <path fill="#fff" fill-rule="evenodd" d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </g>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="portrait" id="screen-portrait" hidden>
+          <h1>横向きにしてね</h1>
+          <p>このゲームは横向きで遊びます。</p>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="./play.mjs"></script>
+  </body>
+</html>
