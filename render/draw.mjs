@@ -15,6 +15,7 @@ import {
   LANTERN as LANTERN_POS,
   SEA_SCALE,
 } from "./fx.mjs";
+import { drawMotionGuides } from "./hand-guides.mjs";
 
 export const VIEW_W = constants.VIEW_W ?? 844;
 export const VIEW_H = constants.VIEW_H ?? 390;
@@ -939,6 +940,7 @@ export function drawScene(ctx, state, opts = {}) {
     const rightPos = rightThumbPos(opts.right, state);
     drawThumbGuide(ctx, view, leftPos.x, leftPos.y, leftPos.active, !!state?.hintLeft);
     drawThumbGuide(ctx, view, rightPos.x, rightPos.y, rightPos.active, !!state?.hintRight);
+    drawMotionGuides(ctx, view, state);
   }
 
   if (playing && phase === "reveal") {
