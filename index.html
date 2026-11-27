@@ -28,19 +28,19 @@
             <button type="button" class="btn-finish" id="btn-finish" hidden disabled aria-disabled="true">仕舞う</button>
           </header>
 
-          <canvas id="game" width="844" height="390" aria-label="プレイ画面。左で明かりを回し、右で明かりの強さを整え、霧笛を鳴らします"></canvas>
+          <canvas id="game" width="844" height="390" aria-label="プレイ画面。左の親指を弧の上でずらして光の向きを決め、右の親指を上下にずらして明るさを変え、霧笛を押します"></canvas>
 
           <div class="hud" id="play-hud" hidden>
             <p class="hud-time" id="hud-time"></p>
           </div>
 
-          <p class="hint hint-left" id="hint-left" hidden>光を向ける</p>
-          <p class="hint hint-right" id="hint-right" hidden>明かりを強く</p>
+          <p class="hint hint-left" id="hint-left" hidden>弧の上をずらす</p>
+          <p class="hint hint-right" id="hint-right" hidden>上下にずらす</p>
 
           <section class="panel" id="screen-title">
             <h1 tabindex="-1">灯台の光</h1>
-            <p class="lead">左の指で明かりを回し、右の指で強さを整え、今日の船を礁のあいだから港へ導きます。</p>
-            <p class="rule">横向きにして、左手で明かりを回し、右手で明かりの強さを上下します。霧が濃いときは、明かりを強くし、霧笛を鳴らします。油と空気は限りがあるので、いつも最大にはできません。同じ日は、だれが遊んでも同じ海です。時間が来ると、そこまでの結果で終わります。</p>
+            <p class="lead">左の親指を弧の上でずらして光の向きを決め、右の親指を上下にずらして明るさを変えます。今日の船を礁のあいだから港へ導きます。</p>
+            <p class="rule">横向きにして、左の親指を左の弧に沿ってずらすと、光がその方向を向きます。右の親指は縦の溝の上へずらすと明るく、下へずらすと暗くなります。霧が濃いときは明るくして、右の霧笛を指で押して鳴らします。光が船に乗っているときだけ、船は航路を保ちやすいです。油と空気は限りがあるので、いつも最大にはできません。座礁しても、その場では終わりません。同じ日は、だれが遊んでも同じ海です。時間が来ると、そこまでの結果で終わります。</p>
             <div class="title-path-wrap">
               <p>海</p>
               <canvas id="title-path" width="240" height="100" aria-hidden="true"></canvas>
