@@ -228,7 +228,7 @@ body.is-playing,
 
 .hint-left {
   left: 6%;
-  top: 42%;
+  top: 44%;
   bottom: auto;
   width: 28%;
   text-align: center;
@@ -238,7 +238,7 @@ body.is-playing,
 
 .hint-right {
   right: 5%;
-  top: 38%;
+  top: 30%;
   bottom: auto;
   width: 28%;
   text-align: center;
